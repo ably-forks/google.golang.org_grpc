@@ -31,6 +31,7 @@ import (
 type scStateUpdate struct {
 	sc    balancer.SubConn
 	state connectivity.State
+	err   error
 }
 
 // scStateUpdateBuffer is an unbounded channel for scStateChangeTuple.
@@ -126,7 +127,7 @@ func (ccb *ccBalancerWrapper) watcher() {
 				return
 			default:
 			}
-			ccb.balancer.HandleSubConnStateChange(t.sc, t.state)
+			ccb.balancer.HandleSubConnStateChange(t.sc, t.state, t.err)
 		case t := <-ccb.resolverUpdateCh:
 			select {
 			case <-ccb.done:
@@ -154,7 +155,7 @@ func (ccb *ccBalancerWrapper) close() {
 	close(ccb.done)
 }
 
-func (ccb *ccBalancerWrapper) handleSubConnStateChange(sc balancer.SubConn, s connectivity.State) {
+func (ccb *ccBalancerWrapper) handleSubConnStateChange(sc balancer.SubConn, s connectivity.State, err error) {
 	// When updating addresses for a SubConn, if the address in use is not in
 	// the new addresses, the old ac will be tearDown() and a new ac will be
 	// created. tearDown() generates a state change with Shutdown state, we
@@ -168,6 +169,7 @@ func (ccb *ccBalancerWrapper) handleSubConnStateChange(sc balancer.SubConn, s co
 	ccb.stateChangeQueue.put(&scStateUpdate{
 		sc:    sc,
 		state: s,
+		err:   err,
 	})
 }
 
@@ -204,8 +206,8 @@ func (ccb *ccBalancerWrapper) RemoveSubConn(sc balancer.SubConn) {
 	ccb.cc.removeAddrConn(acbw.getAddrConn(), errConnDrain)
 }
 
-func (ccb *ccBalancerWrapper) UpdateBalancerState(s connectivity.State, p balancer.Picker) {
-	ccb.cc.csMgr.updateState(s)
+func (ccb *ccBalancerWrapper) UpdateBalancerState(s connectivity.State, err error, p balancer.Picker) {
+	ccb.cc.csMgr.updateState(s, err)
 	ccb.cc.blockingpicker.updatePicker(p)
 }
 

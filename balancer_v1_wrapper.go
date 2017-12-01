@@ -57,7 +57,7 @@ func (bwb *balancerWrapperBuilder) Build(cc balancer.ClientConn, opts balancer.B
 		csEvltr:    &connectivityStateEvaluator{},
 		state:      connectivity.Idle,
 	}
-	cc.UpdateBalancerState(connectivity.Idle, bw)
+	cc.UpdateBalancerState(connectivity.Idle, nil, bw)
 	go bw.lbWatcher()
 	return bw
 }
@@ -228,7 +228,7 @@ func (bw *balancerWrapper) lbWatcher() {
 	}
 }
 
-func (bw *balancerWrapper) HandleSubConnStateChange(sc balancer.SubConn, s connectivity.State) {
+func (bw *balancerWrapper) HandleSubConnStateChange(sc balancer.SubConn, s connectivity.State, err error) {
 	bw.mu.Lock()
 	defer bw.mu.Unlock()
 	scSt, ok := bw.connSt[sc]
@@ -251,7 +251,7 @@ func (bw *balancerWrapper) HandleSubConnStateChange(sc balancer.SubConn, s conne
 	if bw.state != sa {
 		bw.state = sa
 	}
-	bw.cc.UpdateBalancerState(bw.state, bw)
+	bw.cc.UpdateBalancerState(bw.state, err, bw)
 	if s == connectivity.Shutdown {
 		// Remove state for this sc.
 		delete(bw.connSt, sc)

@@ -94,7 +94,7 @@ type ClientConn interface {
 	//
 	// gRPC will update the connectivity state of the ClientConn, and will call pick
 	// on the new picker to pick new SubConn.
-	UpdateBalancerState(s connectivity.State, p Picker)
+	UpdateBalancerState(s connectivity.State, err error, p Picker)
 
 	// Target returns the dial target for this ClientConn.
 	Target() string
@@ -190,7 +190,7 @@ type Balancer interface {
 	// that back to gRPC.
 	// Balancer should also generate and update Pickers when its internal state has
 	// been changed by the new state.
-	HandleSubConnStateChange(sc SubConn, state connectivity.State)
+	HandleSubConnStateChange(sc SubConn, state connectivity.State, err error)
 	// HandleResolvedAddrs is called by gRPC to send updated resolved addresses to
 	// balancers.
 	// Balancer can create new SubConn or remove SubConn with the addresses.

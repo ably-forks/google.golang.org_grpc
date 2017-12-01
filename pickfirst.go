@@ -56,7 +56,7 @@ func (b *pickfirstBalancer) HandleResolvedAddrs(addrs []resolver.Address, err er
 			grpclog.Errorf("pickfirstBalancer: failed to NewSubConn: %v", err)
 			return
 		}
-		b.cc.UpdateBalancerState(connectivity.Idle, &picker{sc: b.sc})
+		b.cc.UpdateBalancerState(connectivity.Idle, err, &picker{sc: b.sc})
 		b.sc.Connect()
 	} else {
 		b.sc.UpdateAddresses(addrs)
@@ -64,7 +64,7 @@ func (b *pickfirstBalancer) HandleResolvedAddrs(addrs []resolver.Address, err er
 	}
 }
 
-func (b *pickfirstBalancer) HandleSubConnStateChange(sc balancer.SubConn, s connectivity.State) {
+func (b *pickfirstBalancer) HandleSubConnStateChange(sc balancer.SubConn, s connectivity.State, err error) {
 	grpclog.Infof("pickfirstBalancer: HandleSubConnStateChange: %p, %v", sc, s)
 	if b.sc != sc {
 		grpclog.Infof("pickfirstBalancer: ignored state change because sc is not recognized")
@@ -77,11 +77,11 @@ func (b *pickfirstBalancer) HandleSubConnStateChange(sc balancer.SubConn, s conn
 
 	switch s {
 	case connectivity.Ready, connectivity.Idle:
-		b.cc.UpdateBalancerState(s, &picker{sc: sc})
+		b.cc.UpdateBalancerState(s, err, &picker{sc: sc})
 	case connectivity.Connecting:
-		b.cc.UpdateBalancerState(s, &picker{err: balancer.ErrNoSubConnAvailable})
+		b.cc.UpdateBalancerState(s, err, &picker{err: balancer.ErrNoSubConnAvailable})
 	case connectivity.TransientFailure:
-		b.cc.UpdateBalancerState(s, &picker{err: balancer.ErrTransientFailure})
+		b.cc.UpdateBalancerState(s, err, &picker{err: balancer.ErrTransientFailure})
 	}
 }
 

@@ -121,7 +121,7 @@ func (b *rrBalancer) regeneratePicker() {
 	b.picker = newPicker(readySCs, nil)
 }
 
-func (b *rrBalancer) HandleSubConnStateChange(sc balancer.SubConn, s connectivity.State) {
+func (b *rrBalancer) HandleSubConnStateChange(sc balancer.SubConn, s connectivity.State, err error) {
 	grpclog.Infof("roundrobin.rrBalancer: handle SubConn state change: %p, %v", sc, s)
 	oldS, ok := b.scStates[sc]
 	if !ok {
@@ -151,7 +151,7 @@ func (b *rrBalancer) HandleSubConnStateChange(sc balancer.SubConn, s connectivit
 		b.regeneratePicker()
 	}
 
-	b.cc.UpdateBalancerState(b.state, b.picker)
+	b.cc.UpdateBalancerState(b.state, err, b.picker)
 	return
 }
 

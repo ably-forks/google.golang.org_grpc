@@ -497,7 +497,7 @@ func DialContext(ctx context.Context, target string, opts ...DialOption) (conn *
 	// A blocking dial blocks until the clientConn is ready.
 	if cc.dopts.block {
 		for {
-			s := cc.GetState()
+			s, _ := cc.GetState()
 			if s == connectivity.Ready {
 				break
 			}
@@ -516,22 +516,24 @@ func DialContext(ctx context.Context, target string, opts ...DialOption) (conn *
 type connectivityStateManager struct {
 	mu         sync.Mutex
 	state      connectivity.State
+	err        error
 	notifyChan chan struct{}
 }
 
 // updateState updates the connectivity.State of ClientConn.
 // If there's a change it notifies goroutines waiting on state change to
 // happen.
-func (csm *connectivityStateManager) updateState(state connectivity.State) {
+func (csm *connectivityStateManager) updateState(state connectivity.State, err error) {
 	csm.mu.Lock()
 	defer csm.mu.Unlock()
 	if csm.state == connectivity.Shutdown {
 		return
 	}
-	if csm.state == state {
+	if csm.state == state && csm.err == err {
 		return
 	}
 	csm.state = state
+	csm.err = err
 	if csm.notifyChan != nil {
 		// There are other goroutines waiting on this channel.
 		close(csm.notifyChan)
@@ -539,10 +541,10 @@ func (csm *connectivityStateManager) updateState(state connectivity.State) {
 	}
 }
 
-func (csm *connectivityStateManager) getState() connectivity.State {
+func (csm *connectivityStateManager) getState() (connectivity.State, error) {
 	csm.mu.Lock()
 	defer csm.mu.Unlock()
-	return csm.state
+	return csm.state, csm.err
 }
 
 func (csm *connectivityStateManager) getNotifyChan() <-chan struct{} {
@@ -586,7 +588,8 @@ type ClientConn struct {
 // This is an EXPERIMENTAL API.
 func (cc *ClientConn) WaitForStateChange(ctx context.Context, sourceState connectivity.State) bool {
 	ch := cc.csMgr.getNotifyChan()
-	if cc.csMgr.getState() != sourceState {
+	s, _ := cc.csMgr.getState()
+	if s != sourceState {
 		return true
 	}
 	select {
@@ -599,7 +602,7 @@ func (cc *ClientConn) WaitForStateChange(ctx context.Context, sourceState connec
 
 // GetState returns the connectivity.State of ClientConn.
 // This is an EXPERIMENTAL API.
-func (cc *ClientConn) GetState() connectivity.State {
+func (cc *ClientConn) GetState() (connectivity.State, error) {
 	return cc.csMgr.getState()
 }
 
@@ -675,7 +678,7 @@ func (cc *ClientConn) switchBalancer(name string) {
 	cc.balancerWrapper.handleResolvedAddrs(cc.curAddresses, nil)
 }
 
-func (cc *ClientConn) handleSubConnStateChange(sc balancer.SubConn, s connectivity.State) {
+func (cc *ClientConn) handleSubConnStateChange(sc balancer.SubConn, s connectivity.State, err error) {
 	cc.mu.Lock()
 	if cc.conns == nil {
 		cc.mu.Unlock()
@@ -683,7 +686,7 @@ func (cc *ClientConn) handleSubConnStateChange(sc balancer.SubConn, s connectivi
 	}
 	// TODO(bar switching) send updates to all balancer wrappers when balancer
 	// gracefully switching is supported.
-	cc.balancerWrapper.handleSubConnStateChange(sc, s)
+	cc.balancerWrapper.handleSubConnStateChange(sc, s, err)
 	cc.mu.Unlock()
 }
 
@@ -735,7 +738,7 @@ func (ac *addrConn) connect() error {
 		return nil
 	}
 	ac.state = connectivity.Connecting
-	ac.cc.handleSubConnStateChange(ac.acbw, ac.state)
+	ac.cc.handleSubConnStateChange(ac.acbw, ac.state, nil)
 	ac.mu.Unlock()
 
 	// Start a goroutine connecting to the server asynchronously.
@@ -835,7 +838,7 @@ func (cc *ClientConn) Close() error {
 	}
 	conns := cc.conns
 	cc.conns = nil
-	cc.csMgr.updateState(connectivity.Shutdown)
+	cc.csMgr.updateState(connectivity.Shutdown, nil)
 
 	rWrapper := cc.resolverWrapper
 	cc.resolverWrapper = nil
@@ -943,13 +946,14 @@ func (ac *addrConn) resetTransport() error {
 		ac.printf("connecting")
 		if ac.state != connectivity.Connecting {
 			ac.state = connectivity.Connecting
-			ac.cc.handleSubConnStateChange(ac.acbw, ac.state)
+			ac.cc.handleSubConnStateChange(ac.acbw, ac.state, nil)
 		}
 		// copy ac.addrs in case of race
 		addrsIter := make([]resolver.Address, len(ac.addrs))
 		copy(addrsIter, ac.addrs)
 		copts := ac.dopts.copts
 		ac.mu.Unlock()
+		var err error
 		for _, addr := range addrsIter {
 			ac.mu.Lock()
 			if ac.state == connectivity.Shutdown {
@@ -963,13 +967,14 @@ func (ac *addrConn) resetTransport() error {
 				Metadata:  addr.Metadata,
 				Authority: ac.cc.authority,
 			}
-			newTransport, err := transport.NewClientTransport(ac.cc.ctx, sinfo, copts, timeout)
+			var newTransport transport.ClientTransport
+			newTransport, err = transport.NewClientTransport(ac.cc.ctx, sinfo, copts, timeout)
 			if err != nil {
 				if e, ok := err.(transport.ConnectionError); ok && !e.Temporary() {
 					ac.mu.Lock()
 					if ac.state != connectivity.Shutdown {
 						ac.state = connectivity.TransientFailure
-						ac.cc.handleSubConnStateChange(ac.acbw, ac.state)
+						ac.cc.handleSubConnStateChange(ac.acbw, ac.state, err)
 					}
 					ac.mu.Unlock()
 					return err
@@ -993,7 +998,7 @@ func (ac *addrConn) resetTransport() error {
 				return errConnClosing
 			}
 			ac.state = connectivity.Ready
-			ac.cc.handleSubConnStateChange(ac.acbw, ac.state)
+			ac.cc.handleSubConnStateChange(ac.acbw, ac.state, nil)
 			t := ac.transport
 			ac.transport = newTransport
 			if t != nil {
@@ -1009,7 +1014,7 @@ func (ac *addrConn) resetTransport() error {
 		}
 		ac.mu.Lock()
 		ac.state = connectivity.TransientFailure
-		ac.cc.handleSubConnStateChange(ac.acbw, ac.state)
+		ac.cc.handleSubConnStateChange(ac.acbw, ac.state, err)
 		if ac.ready != nil {
 			close(ac.ready)
 			ac.ready = nil
@@ -1053,7 +1058,7 @@ func (ac *addrConn) transportMonitor() {
 		// Set connectivity state to TransientFailure before calling
 		// resetTransport. Transition READY->CONNECTING is not valid.
 		ac.state = connectivity.TransientFailure
-		ac.cc.handleSubConnStateChange(ac.acbw, ac.state)
+		ac.cc.handleSubConnStateChange(ac.acbw, ac.state, nil)
 		ac.curAddr = resolver.Address{}
 		ac.mu.Unlock()
 		if err := ac.resetTransport(); err != nil {
@@ -1154,7 +1159,7 @@ func (ac *addrConn) tearDown(err error) {
 	}
 	ac.state = connectivity.Shutdown
 	ac.tearDownErr = err
-	ac.cc.handleSubConnStateChange(ac.acbw, ac.state)
+	ac.cc.handleSubConnStateChange(ac.acbw, ac.state, err)
 	if ac.events != nil {
 		ac.events.Finish()
 		ac.events = nil
