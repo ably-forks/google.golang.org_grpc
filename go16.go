@@ -27,10 +27,10 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/ably-forks/google.golang.org_grpc/codes"
+	"github.com/ably-forks/google.golang.org_grpc/status"
+	"github.com/ably-forks/google.golang.org_grpc/transport"
 	"golang.org/x/net/context"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
-	"google.golang.org/grpc/transport"
 )
 
 // dialContext connects to the address on the named network.

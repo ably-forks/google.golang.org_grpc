@@ -25,11 +25,11 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/ably-forks/google.golang.org_grpc/codes"
+	"github.com/ably-forks/google.golang.org_grpc/status"
+	perfpb "github.com/ably-forks/google.golang.org_grpc/test/codec_perf"
+	"github.com/ably-forks/google.golang.org_grpc/transport"
 	"github.com/golang/protobuf/proto"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
-	perfpb "google.golang.org/grpc/test/codec_perf"
-	"google.golang.org/grpc/transport"
 )
 
 type fullReader struct {

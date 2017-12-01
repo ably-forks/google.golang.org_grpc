@@ -24,11 +24,11 @@ import (
 	"testing"
 	"time"
 
+	"github.com/ably-forks/google.golang.org_grpc/codes"
+	"github.com/ably-forks/google.golang.org_grpc/resolver"
+	"github.com/ably-forks/google.golang.org_grpc/resolver/manual"
+	"github.com/ably-forks/google.golang.org_grpc/test/leakcheck"
 	"golang.org/x/net/context"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/resolver"
-	"google.golang.org/grpc/resolver/manual"
-	"google.golang.org/grpc/test/leakcheck"
 )
 
 func TestOneBackendPickfirst(t *testing.T) {

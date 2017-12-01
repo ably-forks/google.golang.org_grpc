@@ -30,12 +30,12 @@ import (
 	"strings"
 	"time"
 
+	"github.com/ably-forks/google.golang.org_grpc/codes"
+	"github.com/ably-forks/google.golang.org_grpc/status"
 	"github.com/golang/protobuf/proto"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/hpack"
 	spb "google.golang.org/genproto/googleapis/rpc/status"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 )
 
 const (

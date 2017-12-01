@@ -28,19 +28,19 @@ import (
 	"sync"
 	"time"
 
+	"github.com/ably-forks/google.golang.org_grpc/balancer"
+	_ "github.com/ably-forks/google.golang.org_grpc/balancer/roundrobin" // To register roundrobin.
+	"github.com/ably-forks/google.golang.org_grpc/connectivity"
+	"github.com/ably-forks/google.golang.org_grpc/credentials"
+	"github.com/ably-forks/google.golang.org_grpc/grpclog"
+	"github.com/ably-forks/google.golang.org_grpc/keepalive"
+	"github.com/ably-forks/google.golang.org_grpc/resolver"
+	_ "github.com/ably-forks/google.golang.org_grpc/resolver/dns"         // To register dns resolver.
+	_ "github.com/ably-forks/google.golang.org_grpc/resolver/passthrough" // To register passthrough resolver.
+	"github.com/ably-forks/google.golang.org_grpc/stats"
+	"github.com/ably-forks/google.golang.org_grpc/transport"
 	"golang.org/x/net/context"
 	"golang.org/x/net/trace"
-	"google.golang.org/grpc/balancer"
-	_ "google.golang.org/grpc/balancer/roundrobin" // To register roundrobin.
-	"google.golang.org/grpc/connectivity"
-	"google.golang.org/grpc/credentials"
-	"google.golang.org/grpc/grpclog"
-	"google.golang.org/grpc/keepalive"
-	"google.golang.org/grpc/resolver"
-	_ "google.golang.org/grpc/resolver/dns"         // To register dns resolver.
-	_ "google.golang.org/grpc/resolver/passthrough" // To register passthrough resolver.
-	"google.golang.org/grpc/stats"
-	"google.golang.org/grpc/transport"
 )
 
 var (

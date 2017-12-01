@@ -31,7 +31,7 @@ func Path(rel string) string {
 		return rel
 	}
 
-	v, err := goPackagePath("google.golang.org/grpc/testdata")
+	v, err := goPackagePath("github.com/ably-forks/google.golang.org_grpc/testdata")
 	if err != nil {
 		log.Fatalf("Error finding google.golang.org/grpc/testdata directory: %v", err)
 	}

@@ -35,12 +35,12 @@ import (
 	"testing"
 	"time"
 
+	"github.com/ably-forks/google.golang.org_grpc/codes"
+	"github.com/ably-forks/google.golang.org_grpc/keepalive"
+	"github.com/ably-forks/google.golang.org_grpc/status"
 	"golang.org/x/net/context"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/hpack"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/keepalive"
-	"google.golang.org/grpc/status"
 )
 
 type server struct {

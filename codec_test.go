@@ -23,7 +23,7 @@ import (
 	"sync"
 	"testing"
 
-	"google.golang.org/grpc/test/codec_perf"
+	"github.com/ably-forks/google.golang.org_grpc/test/codec_perf"
 )
 
 func marshalAndUnmarshal(t *testing.T, protoCodec Codec, expectedBody []byte) {

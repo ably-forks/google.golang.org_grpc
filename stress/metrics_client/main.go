@@ -23,10 +23,10 @@ import (
 	"fmt"
 	"io"
 
+	"github.com/ably-forks/google.golang.org_grpc"
+	"github.com/ably-forks/google.golang.org_grpc/grpclog"
+	metricspb "github.com/ably-forks/google.golang.org_grpc/stress/grpc_testing"
 	"golang.org/x/net/context"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/grpclog"
-	metricspb "google.golang.org/grpc/stress/grpc_testing"
 )
 
 var (

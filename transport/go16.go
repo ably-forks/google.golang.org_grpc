@@ -23,7 +23,7 @@ package transport
 import (
 	"net"
 
-	"google.golang.org/grpc/codes"
+	"github.com/ably-forks/google.golang.org_grpc/codes"
 
 	"golang.org/x/net/context"
 )

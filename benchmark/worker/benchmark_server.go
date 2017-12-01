@@ -27,14 +27,14 @@ import (
 	"syscall"
 	"time"
 
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/benchmark"
-	testpb "google.golang.org/grpc/benchmark/grpc_testing"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/credentials"
-	"google.golang.org/grpc/grpclog"
-	"google.golang.org/grpc/status"
-	"google.golang.org/grpc/testdata"
+	"github.com/ably-forks/google.golang.org_grpc"
+	"github.com/ably-forks/google.golang.org_grpc/benchmark"
+	testpb "github.com/ably-forks/google.golang.org_grpc/benchmark/grpc_testing"
+	"github.com/ably-forks/google.golang.org_grpc/codes"
+	"github.com/ably-forks/google.golang.org_grpc/credentials"
+	"github.com/ably-forks/google.golang.org_grpc/grpclog"
+	"github.com/ably-forks/google.golang.org_grpc/status"
+	"github.com/ably-forks/google.golang.org_grpc/testdata"
 )
 
 var (

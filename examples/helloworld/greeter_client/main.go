@@ -22,9 +22,9 @@ import (
 	"log"
 	"os"
 
+	"github.com/ably-forks/google.golang.org_grpc"
+	pb "github.com/ably-forks/google.golang.org_grpc/examples/helloworld/helloworld"
 	"golang.org/x/net/context"
-	"google.golang.org/grpc"
-	pb "google.golang.org/grpc/examples/helloworld/helloworld"
 )
 
 const (

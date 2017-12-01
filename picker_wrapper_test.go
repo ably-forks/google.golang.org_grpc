@@ -24,12 +24,12 @@ import (
 	"testing"
 	"time"
 
+	"github.com/ably-forks/google.golang.org_grpc/balancer"
+	"github.com/ably-forks/google.golang.org_grpc/connectivity"
+	_ "github.com/ably-forks/google.golang.org_grpc/grpclog/glogger"
+	"github.com/ably-forks/google.golang.org_grpc/test/leakcheck"
+	"github.com/ably-forks/google.golang.org_grpc/transport"
 	"golang.org/x/net/context"
-	"google.golang.org/grpc/balancer"
-	"google.golang.org/grpc/connectivity"
-	_ "google.golang.org/grpc/grpclog/glogger"
-	"google.golang.org/grpc/test/leakcheck"
-	"google.golang.org/grpc/transport"
 )
 
 const goroutineCount = 5

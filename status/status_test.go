@@ -24,6 +24,7 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/ably-forks/google.golang.org_grpc/codes"
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
 	apb "github.com/golang/protobuf/ptypes/any"
@@ -31,7 +32,6 @@ import (
 	cpb "google.golang.org/genproto/googleapis/rpc/code"
 	epb "google.golang.org/genproto/googleapis/rpc/errdetails"
 	spb "google.golang.org/genproto/googleapis/rpc/status"
-	"google.golang.org/grpc/codes"
 )
 
 func TestErrorsWithSameParameters(t *testing.T) {

@@ -26,12 +26,12 @@ import (
 	"sync"
 	"time"
 
+	"github.com/ably-forks/google.golang.org_grpc/codes"
+	lbmpb "github.com/ably-forks/google.golang.org_grpc/grpclb/grpc_lb_v1/messages"
+	"github.com/ably-forks/google.golang.org_grpc/grpclog"
+	"github.com/ably-forks/google.golang.org_grpc/metadata"
+	"github.com/ably-forks/google.golang.org_grpc/naming"
 	"golang.org/x/net/context"
-	"google.golang.org/grpc/codes"
-	lbmpb "google.golang.org/grpc/grpclb/grpc_lb_v1/messages"
-	"google.golang.org/grpc/grpclog"
-	"google.golang.org/grpc/metadata"
-	"google.golang.org/grpc/naming"
 )
 
 // Client API for LoadBalancer service.

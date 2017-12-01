@@ -22,11 +22,11 @@ import (
 	"fmt"
 	"testing"
 
+	rgmock "github.com/ably-forks/google.golang.org_grpc/examples/route_guide/mock_routeguide"
+	rgpb "github.com/ably-forks/google.golang.org_grpc/examples/route_guide/routeguide"
 	"github.com/golang/mock/gomock"
 	"github.com/golang/protobuf/proto"
 	"golang.org/x/net/context"
-	rgmock "google.golang.org/grpc/examples/route_guide/mock_routeguide"
-	rgpb "google.golang.org/grpc/examples/route_guide/routeguide"
 )
 
 var msg = &rgpb.RouteNote{

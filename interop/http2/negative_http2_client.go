@@ -30,12 +30,12 @@ import (
 	"sync"
 	"time"
 
+	"github.com/ably-forks/google.golang.org_grpc"
+	"github.com/ably-forks/google.golang.org_grpc/codes"
+	"github.com/ably-forks/google.golang.org_grpc/grpclog"
+	"github.com/ably-forks/google.golang.org_grpc/interop"
+	testpb "github.com/ably-forks/google.golang.org_grpc/interop/grpc_testing"
 	"golang.org/x/net/context"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/grpclog"
-	"google.golang.org/grpc/interop"
-	testpb "google.golang.org/grpc/interop/grpc_testing"
 )
 
 var (

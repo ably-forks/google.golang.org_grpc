@@ -27,13 +27,13 @@ import (
 	"testing"
 	"time"
 
+	"github.com/ably-forks/google.golang.org_grpc"
+	"github.com/ably-forks/google.golang.org_grpc/metadata"
+	"github.com/ably-forks/google.golang.org_grpc/stats"
+	testpb "github.com/ably-forks/google.golang.org_grpc/stats/grpc_testing"
+	"github.com/ably-forks/google.golang.org_grpc/status"
 	"github.com/golang/protobuf/proto"
 	"golang.org/x/net/context"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/metadata"
-	"google.golang.org/grpc/stats"
-	testpb "google.golang.org/grpc/stats/grpc_testing"
-	"google.golang.org/grpc/status"
 )
 
 func init() {

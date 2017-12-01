@@ -59,13 +59,13 @@ import (
 	"testing"
 	"time"
 
+	"github.com/ably-forks/google.golang.org_grpc"
+	bm "github.com/ably-forks/google.golang.org_grpc/benchmark"
+	testpb "github.com/ably-forks/google.golang.org_grpc/benchmark/grpc_testing"
+	"github.com/ably-forks/google.golang.org_grpc/benchmark/latency"
+	"github.com/ably-forks/google.golang.org_grpc/benchmark/stats"
+	"github.com/ably-forks/google.golang.org_grpc/grpclog"
 	"golang.org/x/net/context"
-	"google.golang.org/grpc"
-	bm "google.golang.org/grpc/benchmark"
-	testpb "google.golang.org/grpc/benchmark/grpc_testing"
-	"google.golang.org/grpc/benchmark/latency"
-	"google.golang.org/grpc/benchmark/stats"
-	"google.golang.org/grpc/grpclog"
 )
 
 const (

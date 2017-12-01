@@ -21,10 +21,10 @@ package grpc
 import (
 	"sync"
 
-	"google.golang.org/grpc/balancer"
-	"google.golang.org/grpc/connectivity"
-	"google.golang.org/grpc/grpclog"
-	"google.golang.org/grpc/resolver"
+	"github.com/ably-forks/google.golang.org_grpc/balancer"
+	"github.com/ably-forks/google.golang.org_grpc/connectivity"
+	"github.com/ably-forks/google.golang.org_grpc/grpclog"
+	"github.com/ably-forks/google.golang.org_grpc/resolver"
 )
 
 // scStateUpdate contains the subConn and the new state it changed to.

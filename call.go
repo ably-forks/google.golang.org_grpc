@@ -22,14 +22,14 @@ import (
 	"io"
 	"time"
 
+	"github.com/ably-forks/google.golang.org_grpc/balancer"
+	"github.com/ably-forks/google.golang.org_grpc/codes"
+	"github.com/ably-forks/google.golang.org_grpc/encoding"
+	"github.com/ably-forks/google.golang.org_grpc/peer"
+	"github.com/ably-forks/google.golang.org_grpc/stats"
+	"github.com/ably-forks/google.golang.org_grpc/transport"
 	"golang.org/x/net/context"
 	"golang.org/x/net/trace"
-	"google.golang.org/grpc/balancer"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/encoding"
-	"google.golang.org/grpc/peer"
-	"google.golang.org/grpc/stats"
-	"google.golang.org/grpc/transport"
 )
 
 // recvResponse receives and parses an RPC response.

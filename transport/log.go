@@ -21,7 +21,7 @@
 
 package transport
 
-import "google.golang.org/grpc/grpclog"
+import "github.com/ably-forks/google.golang.org_grpc/grpclog"
 
 const logLevel = 2
 

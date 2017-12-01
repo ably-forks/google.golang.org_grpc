@@ -23,7 +23,7 @@ import (
 	"strconv"
 	"time"
 
-	"google.golang.org/grpc/resolver"
+	"github.com/ably-forks/google.golang.org_grpc/resolver"
 )
 
 // NewBuilderWithScheme creates a new test resolver builder with the given scheme.

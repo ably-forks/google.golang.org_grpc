@@ -23,8 +23,8 @@ package glogger
 import (
 	"fmt"
 
+	"github.com/ably-forks/google.golang.org_grpc/grpclog"
 	"github.com/golang/glog"
-	"google.golang.org/grpc/grpclog"
 )
 
 func init() {

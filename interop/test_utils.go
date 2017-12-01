@@ -27,16 +27,16 @@ import (
 	"strings"
 	"time"
 
+	"github.com/ably-forks/google.golang.org_grpc"
+	"github.com/ably-forks/google.golang.org_grpc/codes"
+	"github.com/ably-forks/google.golang.org_grpc/grpclog"
+	testpb "github.com/ably-forks/google.golang.org_grpc/interop/grpc_testing"
+	"github.com/ably-forks/google.golang.org_grpc/metadata"
+	"github.com/ably-forks/google.golang.org_grpc/status"
 	"github.com/golang/protobuf/proto"
 	"golang.org/x/net/context"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/grpclog"
-	testpb "google.golang.org/grpc/interop/grpc_testing"
-	"google.golang.org/grpc/metadata"
-	"google.golang.org/grpc/status"
 )
 
 var (

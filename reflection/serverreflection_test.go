@@ -30,13 +30,13 @@ import (
 	"sort"
 	"testing"
 
+	"github.com/ably-forks/google.golang.org_grpc"
+	rpb "github.com/ably-forks/google.golang.org_grpc/reflection/grpc_reflection_v1alpha"
+	pb "github.com/ably-forks/google.golang.org_grpc/reflection/grpc_testing"
+	pbv3 "github.com/ably-forks/google.golang.org_grpc/reflection/grpc_testingv3"
 	"github.com/golang/protobuf/proto"
 	dpb "github.com/golang/protobuf/protoc-gen-go/descriptor"
 	"golang.org/x/net/context"
-	"google.golang.org/grpc"
-	rpb "google.golang.org/grpc/reflection/grpc_reflection_v1alpha"
-	pb "google.golang.org/grpc/reflection/grpc_testing"
-	pbv3 "google.golang.org/grpc/reflection/grpc_testingv3"
 )
 
 var (

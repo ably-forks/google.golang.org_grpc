@@ -24,10 +24,10 @@ import (
 	"errors"
 	"net"
 
+	"github.com/ably-forks/google.golang.org_grpc/connectivity"
+	"github.com/ably-forks/google.golang.org_grpc/credentials"
+	"github.com/ably-forks/google.golang.org_grpc/resolver"
 	"golang.org/x/net/context"
-	"google.golang.org/grpc/connectivity"
-	"google.golang.org/grpc/credentials"
-	"google.golang.org/grpc/resolver"
 )
 
 var (

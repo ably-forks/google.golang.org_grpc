@@ -28,16 +28,16 @@ import (
 	"sync/atomic"
 	"time"
 
+	"github.com/ably-forks/google.golang.org_grpc/codes"
+	"github.com/ably-forks/google.golang.org_grpc/credentials"
+	"github.com/ably-forks/google.golang.org_grpc/keepalive"
+	"github.com/ably-forks/google.golang.org_grpc/metadata"
+	"github.com/ably-forks/google.golang.org_grpc/peer"
+	"github.com/ably-forks/google.golang.org_grpc/stats"
+	"github.com/ably-forks/google.golang.org_grpc/status"
 	"golang.org/x/net/context"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/hpack"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/credentials"
-	"google.golang.org/grpc/keepalive"
-	"google.golang.org/grpc/metadata"
-	"google.golang.org/grpc/peer"
-	"google.golang.org/grpc/stats"
-	"google.golang.org/grpc/status"
 )
 
 // http2Client implements the ClientTransport interface with HTTP2.

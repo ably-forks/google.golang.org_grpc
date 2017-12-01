@@ -35,15 +35,15 @@ import (
 	"net"
 	"time"
 
+	"github.com/ably-forks/google.golang.org_grpc"
 	"golang.org/x/net/context"
-	"google.golang.org/grpc"
 
-	"google.golang.org/grpc/credentials"
-	"google.golang.org/grpc/testdata"
+	"github.com/ably-forks/google.golang.org_grpc/credentials"
+	"github.com/ably-forks/google.golang.org_grpc/testdata"
 
 	"github.com/golang/protobuf/proto"
 
-	pb "google.golang.org/grpc/examples/route_guide/routeguide"
+	pb "github.com/ably-forks/google.golang.org_grpc/examples/route_guide/routeguide"
 )
 
 var (
